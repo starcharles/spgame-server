@@ -1,0 +1,12 @@
+{
+  "env": "test",
+  "battleTimeout": 2000,
+  "database": {
+    "dbPort": "$PORT",
+    "dialect": "mysql",
+    "url": "localhost",
+    "username": "root",
+    "password": "root",
+    "dbname": "test_database"
+  }
+}

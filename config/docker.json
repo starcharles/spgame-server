@@ -1,0 +1,6 @@
+{
+  "env": "docker",
+  "database": {
+    "url": "db"
+  }
+}

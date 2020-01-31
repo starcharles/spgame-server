@@ -1,0 +1,9 @@
+{
+  "env": "sqlite",
+  "battleTimeout": 2000,
+  "auth": true,
+  "database": {
+    "dialect": "sqlite",
+    "filename": "db/test.sqlite"
+  }
+}

@@ -1,0 +1,1 @@
+web: ./node_modules/.bin/forever -m 10 ./build/src/main.js

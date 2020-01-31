@@ -1,0 +1,53 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+
+# Coverage
+coverage
+
+# Transpiled files
+build/
+
+# VS Code
+.vscode
+!.vscode/tasks.js
+
+# JetBrains IDEs
+.idea/
+
+# Wercker CI
+.wercker/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+.DS_Store
+
+# DB SQLITE
+!db/development.sqlite
+db/*.sqlite
+
+# Docker
+docker/
+
+# config
+config/gcp.json
+
+# SSL Certificates
+ssl-certs/
+
+tool/*.json
+
+# config
+
+config/spgame-satons-firebase-adminsdk-mf8qf-6e2a9ad8af.json
+config/firebase.ts
+config/firebase.ts.org

@@ -1,0 +1,51 @@
+import * as express from "express";
+
+import {isAuthenticated} from "../../src/middleware";
+import {seedData} from "../fixture/middleware/authenticated";
+import {initializeDB} from "../fixture/seed";
+
+const request = require("supertest");
+const app = express();
+
+describe("middleware", () => {
+    let sequelize;
+
+    describe("isAuthenticated", () => {
+        app.use(isAuthenticated);
+        app.get("/hello", (req, res, next) => {
+
+            res.status(200).json({
+                message: "hello",
+            });
+            next();
+        });
+        app.use((err, req, res, next) => {
+            console.log(err.message);
+            next();
+        });
+
+        beforeEach(async () => {
+            sequelize = await initializeDB(seedData);
+        });
+
+        afterEach(async () => {
+            await sequelize.close();
+        });
+
+        it("should get 404 without header", async (done) => {
+            const response = await request(app).get("/hello");
+            expect(response.status).toEqual(404);
+            expect(response.body).toEqual({});
+            done();
+        });
+
+        it("should get 404 with expired authorization: header", async (done) => {
+            const token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBhOTAwNTFmYzA5ZThmNjBlMTE2N2ViYzMxMjYwZjNiM2Y2YmJhYmIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3BnYW1lLXNhdG9ucyIsImF1ZCI6InNwZ2FtZS1zYXRvbnMiLCJhdXRoX3RpbWUiOjE1NjkzNzU0NTYsInVzZXJfaWQiOiI1VWJwSUpOdWl3Z0lQUENBRlhscVdGS2cyZnMyIiwic3ViIjoiNVVicElKTnVpd2dJUFBDQUZYbHFXRktnMmZzMiIsImlhdCI6MTU2OTM3NTQ1NiwiZXhwIjoxNTY5Mzc5MDU2LCJlbWFpbCI6Im5hb3RvbnMzOUBnbWFpbC5jb20xMTIyIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbIm5hb3RvbnMzOUBnbWFpbC5jb20xMTIyIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.Fdvz-HytmVtVTch6BKnS5z-UTmUKCSF3X_dJ46EJfSz_YTieaLSxy4iLv9EmJNJUbf_KswhxF1NWwub8IZU8BXBqcc1yJIiGbuYhuLFCqwHycAxN6ewIfTmaZIfIDZxCu13YatR6FVzm3MRoXXT8v_xw5S-VHXjbfFTm5bEeocoikAEbk68FRvpcntVyfqQSmu1KipZaqmcGuvTwnO7dqAVDPPWvUee__Nky3yGTDtLw9YK3V9xjafNDkg9Ku7a9VttFXTRlfOx63gHHRvJyf97ztXiFprh73SJ0W1-g-UcbXRI7J31LtNgmoHyJun1PjHFOv6rc0IoBNJJDJGalPQ";
+            const response = await request(app)
+                .get("/hello")
+                .set("authorization", "Bearer " + token);
+            expect(response.status).toEqual(404);
+            done();
+        });
+    });
+});

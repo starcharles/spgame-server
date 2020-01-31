@@ -1,0 +1,49 @@
+box: node:10.14.2
+
+#services:
+#  - id: mysql:5.7
+#    name: db
+#    container_name: mysql_wercker
+#    env:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: root
+#      MYSQL_DATABASE: test_database
+
+build:
+  steps:
+    - script:
+      name: node.js version
+      code: |
+        echo "node.js version: $(node -v)"
+        echo "npm version v$(npm -v)"
+
+    - npm-install
+
+    - script:
+      name: lint
+      code: npm run lint
+
+    - script:
+      name: build
+      code: npm run build
+
+    - script:
+      name: test-sqlite
+      code: |
+        npm i sqlite3
+        mkdir db
+        touch db/test.sqlite
+        npm run test:sqlite
+
+#    - script:
+#      name: replace mysql url on config/test.json
+#      code: sed -i -e "s/localhost/db/" ${WERCKER_SOURCE_DIR}/config/test.json
+
+#    - npm-test
+
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL
+      channel: notify
+      username: wercker-bot

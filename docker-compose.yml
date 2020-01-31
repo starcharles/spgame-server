@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  # MySQL
+  db:
+    image: mysql:5.7
+    container_name: mysql_host
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_database
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+    - ./docker/db/data:/var/lib/mysql
+    - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    - ./docker/db/sql:/docker-entrypoint-initdb.d
+    ports:
+    - 3306:3306
+  # App
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+      - 9229:9229 # inspect debug
+    tty: true
+    command: bash -c "npm i firebase-admin && nodemon --config nodemon-debug-docker.json"
+#    depends_on:
+#      - db
+  # https front
+  https:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    volumes:
+      - ./ssl-certs:/var/lib/https-portal
+    environment:
+      DOMAINS: 'stage.spgame-giapi.xyz -> http://nginx:8000'
+      #      STAGE: 'local'
+      STAGE: 'production'
+      FORCE_RENEW: 'true'
+  # proxy server
+  nginx:
+    build:
+      context: ./nginx      # Dockerfile保存場所
+      dockerfile: Dockerfile    # Dockerfileファイル名
+    ports:
+      - 8000:8000
+    depends_on:
+      - app

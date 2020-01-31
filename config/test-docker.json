@@ -1,0 +1,7 @@
+{
+  "env": "test-docker",
+  "battleTimeout": 2000,
+  "database": {
+    "url": "db"
+  }
+}

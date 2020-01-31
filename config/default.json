@@ -1,0 +1,17 @@
+{
+  "env": "default",
+  "auth": false,
+  "log": false,
+  "battleTimeout": 30000,
+  "ALLOW_ORIGIN":"*",
+  "FIREBASE_API_KEY":"",
+  "database": {
+    "dialect": "mysql",
+    "dbPort": "3306",
+    "ssl": false,
+    "url": "localhost",
+    "username": "root",
+    "password": "root",
+    "dbname": "test_database"
+  }
+}

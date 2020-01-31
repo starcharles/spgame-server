@@ -1,0 +1,12 @@
+{
+  "env": "dev",
+  "battleTimeout": 2000,
+  "auth": true,
+  "database": {
+    "dialect": "mysql",
+    "url": "localhost",
+    "username": "root",
+    "password": "root",
+    "dbname": "spgame_database"
+  }
+}
