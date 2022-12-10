@@ -43,7 +43,7 @@
     "body-parser": "^1.18.2",
     "config": "^1.30.0",
     "cors": "^2.8.5",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "express-graceful-shutdown": "^1.0.0",
     "express-namespace": "^0.1.1",
     "express-validator": "^5.1.1",
